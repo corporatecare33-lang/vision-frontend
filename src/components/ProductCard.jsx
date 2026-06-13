@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ClipboardCheck, ShoppingCart } from "lucide-react";
+import { useState } from "react";
 import ProductVisual from "./ProductVisual";
 import { addCartItem } from "../utils/cart";
 
@@ -8,7 +9,15 @@ const MotionArticle = motion.article;
 
 const ProductCard = ({ product, variant = "default" }) => {
   const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState(0);
   const href = `/products/${product.id}`;
+  const basePrice = Number(product.price);
+  const optionPrices = product.specs.slice(0, 3).filter(Boolean).map((label, index) => ({
+    label,
+    price: basePrice + index * 2500,
+  }));
+  const selectedPrice = optionPrices[selectedOption]?.price || basePrice;
+  const selectedOptionLabel = optionPrices[selectedOption]?.label || product.specs[0];
   const cartItem = {
     id: product.id,
     name: product.name,
@@ -16,8 +25,8 @@ const ProductCard = ({ product, variant = "default" }) => {
     image: product.image,
     visual: product.visual,
     color: product.color,
-    option: product.specs[0],
-    price: Number(product.price),
+    option: selectedOptionLabel,
+    price: selectedPrice,
     quantity: 1,
   };
 
@@ -82,16 +91,32 @@ const ProductCard = ({ product, variant = "default" }) => {
           ))}
         </div>
 
-        <div className="mt-auto mb-4">
-          <div className="text-xl font-bold text-vision-blue">Tk {product.price}</div>
+        <div className="mt-auto mb-4 space-y-3">
+          {optionPrices.length > 1 && (
+            <label className="block">
+              <span className="mb-1 block text-[10px] font-black uppercase tracking-wider text-slate-500">Price Option</span>
+              <select
+                value={selectedOption}
+                onChange={(event) => setSelectedOption(Number(event.target.value))}
+                className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-800 outline-none transition focus:border-vision-blue focus:ring-2 focus:ring-cyan-100"
+              >
+                {optionPrices.map((option, index) => (
+                  <option key={option.label} value={index}>
+                    {option.label} - Tk {option.price}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <div className="text-xl font-bold text-vision-blue">Tk {selectedPrice}</div>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <button type="button" onClick={handleAddToCart} className="inline-flex items-center justify-center gap-1.5 rounded-md border border-vision-blue px-3 py-2 text-xs font-black text-vision-blue transition hover:bg-cyan-50">
+          <button type="button" onClick={handleAddToCart} className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-vision-blue px-2 py-2 text-[11px] font-black text-vision-blue transition hover:bg-cyan-50">
             <ShoppingCart className="h-4 w-4" />
             Add to Cart
           </button>
-          <button type="button" onClick={handleOrder} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-vision-blue px-3 py-2 text-xs font-black text-white transition hover:bg-vision-dark">
+          <button type="button" onClick={handleOrder} className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md bg-vision-blue px-2 py-2 text-[11px] font-black text-white transition hover:bg-vision-dark">
             <ClipboardCheck className="h-4 w-4" />
             Order
           </button>
