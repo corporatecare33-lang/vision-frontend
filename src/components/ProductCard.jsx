@@ -1,48 +1,52 @@
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ClipboardCheck, ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import ProductVisual from "./ProductVisual";
 import { addCartItem } from "../utils/cart";
-
-const MotionArticle = motion.article;
 
 const ProductCard = ({ product, variant = "default" }) => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState(0);
   const href = `/products/${product.id}`;
   const basePrice = Number(product.price);
-  const optionPrices = product.specs.slice(0, 3).filter(Boolean).map((label, index) => ({
-    label,
-    price: basePrice + index * 2500,
-  }));
+  const optionPrices = useMemo(
+    () =>
+      product.specs.slice(0, 3).filter(Boolean).map((label, index) => ({
+        label,
+        price: basePrice + index * 2500,
+      })),
+    [basePrice, product.specs]
+  );
   const selectedPrice = optionPrices[selectedOption]?.price || basePrice;
   const selectedOptionLabel = optionPrices[selectedOption]?.label || product.specs[0];
-  const cartItem = {
-    id: product.id,
-    name: product.name,
-    model: product.model,
-    image: product.image,
-    visual: product.visual,
-    color: product.color,
-    option: selectedOptionLabel,
-    price: selectedPrice,
-    quantity: 1,
-  };
+  const cartItem = useMemo(
+    () => ({
+      id: product.id,
+      name: product.name,
+      model: product.model,
+      image: product.image,
+      visual: product.visual,
+      color: product.color,
+      option: selectedOptionLabel,
+      price: selectedPrice,
+      quantity: 1,
+    }),
+    [product, selectedOptionLabel, selectedPrice]
+  );
 
-  const handleAddToCart = () => {
+  const handleAddToCart = useCallback(() => {
     addCartItem(cartItem);
     navigate("/cart");
-  };
+  }, [cartItem, navigate]);
 
-  const handleOrder = () => {
+  const handleOrder = useCallback(() => {
     addCartItem(cartItem);
     navigate("/order");
-  };
+  }, [cartItem, navigate]);
 
   if (variant === "minimal") {
     return (
-      <motion.div whileHover={{ y: -5 }}>
+      <div className="transition-transform duration-300 hover:-translate-y-1">
         <Link to={href} className="group flex min-h-[250px] cursor-pointer flex-col items-center bg-white">
           <div className="relative mb-4 flex aspect-[4/3] w-full items-center justify-center overflow-hidden border border-slate-100 bg-gradient-to-br from-white to-cyan-50 transition-all group-hover:border-cyan-200">
             {product.image ? (
@@ -58,15 +62,12 @@ const ProductCard = ({ product, variant = "default" }) => {
             <div className="text-[13px] font-black text-slate-950">Tk {product.price}</div>
           </div>
         </Link>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <MotionArticle
-      whileHover={{ y: -10 }}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:border-cyan-200 hover:shadow-xl"
-    >
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-cyan-200 hover:shadow-xl">
       <Link to={href} className="relative flex aspect-square items-center justify-center overflow-hidden bg-gradient-to-br from-white via-cyan-50 to-blue-50" aria-label={`Open ${product.name}`}>
         <div className="absolute right-4 top-4 rounded-full bg-white/80 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-vision-blue shadow-sm">
           Vision
@@ -122,8 +123,8 @@ const ProductCard = ({ product, variant = "default" }) => {
           </button>
         </div>
       </div>
-    </MotionArticle>
+    </article>
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);
