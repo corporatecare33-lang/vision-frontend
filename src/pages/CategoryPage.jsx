@@ -13,8 +13,9 @@ const CategoryPage = () => {
   }
 
   const categoryProducts = category.subcategories.flatMap((subcategory) => getProductsForSubcategory(category.id, subcategory.id));
-  const categoryProductImages = categoryProducts.filter((product) => product.image).slice(0, 3);
+  const categoryProductImage = categoryProducts.find((product) => product.image);
   const fallbackVisual = categoryProducts[0]?.visual;
+  const heroImage = category.image || categoryProductImage?.image;
 
   return (
     <div>
@@ -33,17 +34,11 @@ const CategoryPage = () => {
             <h1 className="mb-5 text-4xl font-black uppercase tracking-normal text-slate-950 md:text-6xl">{category.name}</h1>
             <p className="max-w-2xl text-lg leading-8 text-slate-600">{category.description}</p>
           </div>
-          <div className={category.image ? "flex justify-center" : categoryProductImages.length > 0 ? "grid grid-cols-3 gap-3" : "flex justify-center"}>
-            {category.image ? (
+          <div className="flex justify-center">
+            {heroImage ? (
               <div className="flex h-64 w-full max-w-lg items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-4 shadow-sm">
-                <img src={category.image} alt={category.name} className="h-full w-full object-contain" />
+                <img src={heroImage} alt={category.name} className="h-full w-full object-contain" />
               </div>
-            ) : categoryProductImages.length > 0 ? (
-              categoryProductImages.map((product, index) => (
-                <div key={product.id} className={`flex h-48 items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-4 shadow-sm ${index === 1 ? "translate-y-6" : ""}`}>
-                  <img src={product.image} alt={product.name} className="h-full w-full object-contain" />
-                </div>
-              ))
             ) : (
               <div className="flex h-64 w-full max-w-md items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-6 shadow-sm">
                 <ProductVisual type={fallbackVisual} color={category.accent} />
