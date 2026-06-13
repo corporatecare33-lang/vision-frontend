@@ -9,6 +9,23 @@ const socialLinks = [
   { Icon: Github, href: "https://github.com/", label: "Github" },
 ];
 
+const officeLocations = [
+  {
+    title: "Singapore Office",
+    address: "15C Kang Choon Bin Road, S548276 Singapore.",
+  },
+  {
+    title: "Bangladesh Office",
+    address: "House: 12, Road: 01, Block: F, Banani, Dhaka-1236.",
+  },
+  {
+    title: "Timor-Leste Office",
+    address: "Aimutin, Comoro, Dom Aleixo, Dili, Timor-Leste.",
+  },
+];
+
+const hotlineNumbers = ["+65 9427 9703", "+670 7551 3983", "+670 7717 9555"];
+
 const Footer = () => {
   return (
     <footer className="border-t border-cyan-200 bg-vision-dark pt-14 text-white">
@@ -52,12 +69,42 @@ const Footer = () => {
           <div className="col-span-2 lg:col-span-1">
             <h3 className="mb-5 text-sm font-black uppercase tracking-widest">Contact</h3>
             <ul className="space-y-4 text-sm text-slate-300">
-              <li className="flex justify-center gap-3 md:justify-start"><MapPin className="mt-1 h-4 w-4 text-vision-cyan" />Vision Tower, Dhaka, Bangladesh</li>
-              <li className="flex justify-center gap-3 md:justify-start"><Phone className="h-4 w-4 text-vision-cyan" />+880 123 456 789</li>
-              <li className="flex justify-center gap-3 md:justify-start"><Mail className="h-4 w-4 text-vision-cyan" />support@vision.com</li>
+              <li className="flex justify-center gap-3 md:justify-start">
+                <Phone className="mt-1 h-4 w-4 shrink-0 text-vision-cyan" />
+                <div>
+                  <div className="mb-1 font-black uppercase text-white">Hotline</div>
+                  <div className="space-y-1">
+                    {hotlineNumbers.map((number) => (
+                      <a key={number} href={`tel:${number.replace(/\s/g, "")}`} className="block hover:text-white">
+                        {number}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </li>
+              <li className="flex justify-center gap-3 md:justify-start">
+                <Mail className="mt-1 h-4 w-4 shrink-0 text-vision-cyan" />
+                <a href="mailto:visionsg26@gmail.com" className="hover:text-white">visionsg26@gmail.com</a>
+              </li>
             </ul>
           </div>
         </div>
+
+        <div className="mb-10 rounded-lg border border-white/10 bg-white/5 p-5">
+          <h3 className="mb-5 text-center text-sm font-black uppercase tracking-widest text-white md:text-left">Our Locations</h3>
+          <div className="grid gap-4 md:grid-cols-3">
+            {officeLocations.map((location) => (
+              <div key={location.title} className="flex gap-3 rounded-md bg-white/5 p-4 text-left">
+                <MapPin className="mt-1 h-5 w-5 shrink-0 text-vision-cyan" />
+                <div>
+                  <div className="mb-1 font-black text-white">{location.title}</div>
+                  <p className="text-sm leading-6 text-slate-300">{location.address}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="flex flex-col items-center gap-3 border-t border-white/10 py-6 text-center text-sm text-slate-400 md:flex-row md:items-center md:justify-between md:text-left">
           <p>Copyright 2026 Vision Appliances. All rights reserved.</p>
           <div className="flex justify-center gap-5">
