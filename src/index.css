@@ -551,6 +551,10 @@ body {
     object-position: center;
   }
 
+  .hero-banner-mobile-cover img {
+    object-fit: cover;
+  }
+
   .hero-copy,
   .hero-copy-right {
     display: none;

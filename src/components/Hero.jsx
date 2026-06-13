@@ -30,6 +30,7 @@ const slides = [
     subtitle: "Advanced no-frost performance with lasting durability.",
     tone: "dark",
     align: "right",
+    mobileFit: "cover",
   },
   {
     image: "/hero/verticle-freezer.jpg",
@@ -47,7 +48,7 @@ const Hero = () => {
       <Swiper modules={[Pagination, Autoplay, EffectFade]} effect="fade" pagination={{ clickable: true }} autoplay={{ delay: 4500 }} loop className="hero-swiper">
         {slides.map((slide) => (
           <SwiperSlide key={slide.image}>
-            <div className="hero-banner">
+            <div className={`hero-banner ${slide.mobileFit === "cover" ? "hero-banner-mobile-cover" : ""}`}>
               <img src={assetPath(slide.image)} alt={slide.alt} />
               <div className={`hero-copy ${slide.tone === "dark" ? "hero-copy-dark" : ""} ${slide.align === "right" ? "hero-copy-right" : ""}`}>
                 <p>{slide.kicker}</p>
