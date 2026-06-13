@@ -118,7 +118,7 @@ const Header = () => {
           <NavLink
             to="/cart"
             className={({ isActive }) =>
-              `relative inline-flex h-12 w-16 items-center justify-center rounded-md border transition ${
+              `relative inline-flex h-9 items-center justify-center gap-2 rounded-md border px-4 text-[13px] font-bold uppercase tracking-wider transition ${
                 isActive
                   ? "border-vision-blue bg-cyan-50 text-vision-blue"
                   : "border-slate-200 text-slate-800 hover:border-vision-blue hover:bg-cyan-50 hover:text-vision-blue"
@@ -126,9 +126,10 @@ const Header = () => {
             }
             aria-label={`Cart${cartCount > 0 ? `, ${cartCount} items` : ""}`}
           >
-            <ShoppingCart className="h-8 w-8 stroke-[2.8]" />
+            <ShoppingCart className="h-4 w-4 stroke-[2.8]" />
+            <span>Cart</span>
             {cartCount > 0 && (
-              <span className="absolute right-1.5 top-1 rounded-full bg-vision-cyan px-1.5 py-0.5 text-[10px] font-black leading-none text-vision-dark">
+              <span className="ml-0.5 rounded-full bg-vision-cyan px-1.5 py-0.5 text-[10px] font-black leading-none text-vision-dark">
                 {cartCount}
               </span>
             )}
