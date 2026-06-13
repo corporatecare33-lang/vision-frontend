@@ -3,10 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
+import { assetPath } from "../data/data";
 
 const slides = [
   {
-    image: "/hero-generated/side-by-side-clean-bg.jpg",
+    image: "/hero/side-by-side.jpg",
     alt: "Vision side by side refrigerator",
     kicker: "Vision Cooling",
     title: "Side by Side Refrigerator",
@@ -14,7 +15,7 @@ const slides = [
     tone: "light",
   },
   {
-    image: "/hero-generated/single-door-clean-bg.jpg",
+    image: "/hero/single-door.jpg",
     alt: "Vision single door refrigerator",
     kicker: "Compact Freshness",
     title: "Single Door Refrigerator",
@@ -22,7 +23,7 @@ const slides = [
     tone: "light",
   },
   {
-    image: "/hero-generated/non-frost-clean-bg.jpg",
+    image: "/hero/non-forst-english-1920x550.jpg",
     alt: "Vision no frost refrigerator",
     kicker: "No Frost Series",
     title: "Fresh Cooling, Less Hassle",
@@ -31,7 +32,7 @@ const slides = [
     align: "right",
   },
   {
-    image: "/hero-generated/vertical-freezer-clean-bg.jpg",
+    image: "/hero/verticle-freezer.jpg",
     alt: "Vision vertical freezer",
     kicker: "Vertical Freezer",
     title: "More Space, Clean Design",
@@ -47,7 +48,7 @@ const Hero = () => {
         {slides.map((slide) => (
           <SwiperSlide key={slide.image}>
             <div className="hero-banner">
-              <img src={slide.image} alt={slide.alt} />
+              <img src={assetPath(slide.image)} alt={slide.alt} />
               <div className={`hero-copy ${slide.tone === "dark" ? "hero-copy-dark" : ""} ${slide.align === "right" ? "hero-copy-right" : ""}`}>
                 <p>{slide.kicker}</p>
                 <h1>{slide.title}</h1>

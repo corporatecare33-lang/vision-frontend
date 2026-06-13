@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import ProductVisual from "../components/ProductVisual";
 import { getCategory, getProductsForSubcategory } from "../data/data";
 
 const CategoryPage = () => {
@@ -10,6 +11,10 @@ const CategoryPage = () => {
   if (!category) {
     return <div className="container-custom py-24 text-center text-2xl font-black">Category not found</div>;
   }
+
+  const categoryProducts = category.subcategories.flatMap((subcategory) => getProductsForSubcategory(category.id, subcategory.id));
+  const categoryProductImages = categoryProducts.filter((product) => product.image).slice(0, 3);
+  const fallbackVisual = categoryProducts[0]?.visual;
 
   return (
     <div>
@@ -28,17 +33,21 @@ const CategoryPage = () => {
             <h1 className="mb-5 text-4xl font-black uppercase tracking-normal text-slate-950 md:text-6xl">{category.name}</h1>
             <p className="max-w-2xl text-lg leading-8 text-slate-600">{category.description}</p>
           </div>
-          <div className={category.image ? "flex justify-center" : "grid grid-cols-3 gap-3"}>
+          <div className={category.image ? "flex justify-center" : categoryProductImages.length > 0 ? "grid grid-cols-3 gap-3" : "flex justify-center"}>
             {category.image ? (
               <div className="flex h-64 w-full max-w-lg items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-4 shadow-sm">
                 <img src={category.image} alt={category.name} className="h-full w-full object-contain" />
               </div>
-            ) : (
-              category.subcategories.flatMap((subcategory) => getProductsForSubcategory(category.id, subcategory.id)).filter((product) => product.image).slice(0, 3).map((product, index) => (
+            ) : categoryProductImages.length > 0 ? (
+              categoryProductImages.map((product, index) => (
                 <div key={product.id} className={`flex h-48 items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-4 shadow-sm ${index === 1 ? "translate-y-6" : ""}`}>
                   <img src={product.image} alt={product.name} className="h-full w-full object-contain" />
                 </div>
               ))
+            ) : (
+              <div className="flex h-64 w-full max-w-md items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-6 shadow-sm">
+                <ProductVisual type={fallbackVisual} color={category.accent} />
+              </div>
             )}
           </div>
         </div>

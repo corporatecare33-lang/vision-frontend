@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
-import { categories, products } from "../data/data";
+import { assetPath, categories, products } from "../data/data";
 import { getCartCount } from "../utils/cart";
 
 const navLinkClass = ({ isActive }) =>
@@ -81,7 +81,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="container-custom flex h-16 items-center justify-between lg:h-20">
         <Link to="/" className="flex items-center gap-3" onClick={close}>
-          <img src="/vision-logo.jpeg" alt="Vision Smart" className="h-12 w-auto object-contain lg:h-14" />
+          <img src={assetPath("/vision-logo.jpeg")} alt="Vision Smart" className="h-12 w-auto object-contain lg:h-14" />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -194,7 +194,7 @@ const Header = () => {
 
       <div className={`fixed inset-0 z-50 bg-white transition-transform duration-300 lg:hidden ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
         <div className="flex h-16 items-center justify-between border-b border-slate-100 px-5">
-          <img src="/vision-logo.jpeg" alt="Vision Smart" className="h-11 w-auto object-contain" />
+          <img src={assetPath("/vision-logo.jpeg")} alt="Vision Smart" className="h-11 w-auto object-contain" />
           <button className="rounded-md p-2" onClick={close} aria-label="Close menu">
             <X className="h-7 w-7" />
           </button>

@@ -6,9 +6,9 @@ const Products = () => {
   const [activeCategory, setActiveCategory] = useState("all");
 
   const uniqueProducts = products.filter((product, index, list) => {
-    const key = product.image || `${product.category}-${product.subcategory}-${product.visual}`;
+    const key = `${product.category}-${product.subcategory}-${product.image || product.visual}`;
     return list.findIndex((item) => {
-      const itemKey = item.image || `${item.category}-${item.subcategory}-${item.visual}`;
+      const itemKey = `${item.category}-${item.subcategory}-${item.image || item.visual}`;
       return itemKey === key;
     }) === index;
   });

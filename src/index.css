@@ -61,6 +61,7 @@ body {
 
 .hero-copy {
   position: absolute;
+  display: none;
   left: clamp(20px, 10vw, 214px);
   top: 50%;
   z-index: 2;
@@ -528,17 +529,47 @@ body {
 }
 
 @media (max-width: 768px) {
+  .hero-swiper .swiper-pagination {
+    bottom: 8px;
+  }
+
   .hero-banner {
-    min-height: 300px;
+    aspect-ratio: 1920 / 550;
+    min-height: 132px;
     max-height: none;
+    background: #ffffff;
+  }
+
+  .hero-banner::after {
+    display: none;
   }
 
   .hero-banner img {
+    object-fit: contain;
     object-position: center;
   }
 
   .hero-copy,
   .hero-copy-right {
     display: none;
+  }
+
+  .hero-copy p {
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+  }
+
+  .hero-copy h1 {
+    max-width: 12ch;
+    font-size: 34px;
+    line-height: 0.98;
+  }
+
+  .hero-copy span {
+    max-width: 310px;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.45;
   }
 }

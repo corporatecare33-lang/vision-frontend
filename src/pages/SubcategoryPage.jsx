@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import ProductCard from "../components/ProductCard";
-import ProductVisual from "../components/ProductVisual";
 import { getCategory, getProductsForSubcategory, getSubcategory } from "../data/data";
 
 const SubcategoryPage = () => {
@@ -33,7 +32,11 @@ const SubcategoryPage = () => {
             <h1 className="mb-4 text-4xl font-black uppercase tracking-normal text-slate-950 md:text-6xl">{subcategory.name}</h1>
             <p className="max-w-2xl text-lg leading-8 text-slate-600">{subcategory.tagline}</p>
           </div>
-          <ProductVisual type={subcategoryProducts[0]?.visual} color={category.accent} />
+          {subcategoryProducts[0]?.image && (
+            <div className="flex h-64 items-center justify-center rounded-lg border border-cyan-100 bg-white/80 p-5 shadow-sm">
+              <img src={subcategoryProducts[0].image} alt={subcategoryProducts[0].name} className="h-full w-full object-contain" />
+            </div>
+          )}
         </div>
       </section>
 

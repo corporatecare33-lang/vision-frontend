@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Facebook, Github, Instagram, Mail, MapPin, Phone, Youtube } from "lucide-react";
-import { categories } from "../data/data";
+import { assetPath, categories } from "../data/data";
 
 const socialLinks = [
   { Icon: Facebook, href: "#", label: "Facebook" },
@@ -16,7 +16,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-8 pb-12 text-center md:grid-cols-2 md:text-left lg:grid-cols-[1.2fr_0.8fr_1fr_1fr]">
           <div className="col-span-2 lg:col-span-1">
             <div className="mb-5 flex items-center justify-center gap-3 md:justify-start">
-              <img src="/vision-logo.jpeg" alt="Vision Smart" className="h-16 w-auto rounded-md bg-white object-contain p-2" />
+              <img src={assetPath("/vision-logo.jpeg")} alt="Vision Smart" className="h-16 w-auto rounded-md bg-white object-contain p-2" />
             </div>
             <p className="mx-auto max-w-sm text-sm leading-7 text-slate-300 md:mx-0">
               Modern electronics and appliances designed for Bangladeshi homes, shops, and everyday routines.
