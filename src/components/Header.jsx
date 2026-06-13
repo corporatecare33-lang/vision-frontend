@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { assetPath, categories, products } from "../data/data";
 import { getCartCount } from "../utils/cart";
 
@@ -118,17 +118,20 @@ const Header = () => {
           <NavLink
             to="/cart"
             className={({ isActive }) =>
-              `inline-flex h-9 items-center justify-center rounded-md border px-4 text-[13px] font-bold uppercase tracking-wider transition ${
+              `relative inline-flex h-12 w-16 items-center justify-center rounded-md border transition ${
                 isActive
                   ? "border-vision-blue bg-cyan-50 text-vision-blue"
                   : "border-slate-200 text-slate-800 hover:border-vision-blue hover:bg-cyan-50 hover:text-vision-blue"
               }`
             }
+            aria-label={`Cart${cartCount > 0 ? `, ${cartCount} items` : ""}`}
           >
-            <span className="inline-flex items-center gap-2">
-              Cart
-              {cartCount > 0 && <span className="rounded-full bg-vision-cyan px-2 py-0.5 text-[10px] text-vision-dark">{cartCount}</span>}
-            </span>
+            <ShoppingCart className="h-8 w-8 stroke-[2.8]" />
+            {cartCount > 0 && (
+              <span className="absolute right-1.5 top-1 rounded-full bg-vision-cyan px-1.5 py-0.5 text-[10px] font-black leading-none text-vision-dark">
+                {cartCount}
+              </span>
+            )}
           </NavLink>
           <button type="button" onClick={() => setIsSearchOpen((value) => !value)} className="grid h-9 w-9 place-items-center rounded-md border border-slate-200 text-slate-700 transition hover:border-vision-blue hover:bg-cyan-50 hover:text-vision-blue" aria-label="Search products">
             <Search className="h-4 w-4" />
@@ -220,8 +223,14 @@ const Header = () => {
               </div>
             )}
             {["Home", "Products", "About", "Support", "Contact", "Cart"].map((label) => (
-              <Link key={label} to={label === "Home" ? "/" : `/${label.toLowerCase()}`} onClick={close} className="rounded-md border border-slate-100 px-4 py-3 font-bold uppercase tracking-wider text-slate-800">
-                {label}{label === "Cart" && cartCount > 0 ? ` (${cartCount})` : ""}
+              <Link key={label} to={label === "Home" ? "/" : `/${label.toLowerCase()}`} onClick={close} className="flex items-center justify-between rounded-md border border-slate-100 px-4 py-3 font-bold uppercase tracking-wider text-slate-800">
+                <span>{label}</span>
+                {label === "Cart" && (
+                  <span className="inline-flex items-center gap-2">
+                    <ShoppingCart className="h-6 w-6 stroke-[2.8]" />
+                    {cartCount > 0 && <span className="rounded-full bg-vision-cyan px-2 py-0.5 text-[10px] text-vision-dark">{cartCount}</span>}
+                  </span>
+                )}
               </Link>
             ))}
           </div>
