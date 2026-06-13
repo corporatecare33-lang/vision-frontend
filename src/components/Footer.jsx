@@ -24,7 +24,7 @@ const officeLocations = [
   },
 ];
 
-const hotlineNumbers = ["+65 9427 9703", "+670 7551 3983", "+670 7717 9555"];
+const hotlineNumbers = ["+670 7551 3983", "+670 7717 9555"];
 
 const Footer = () => {
   return (
