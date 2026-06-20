@@ -9,16 +9,17 @@ const ProductCard = ({ product, variant = "default" }) => {
   const [selectedOption, setSelectedOption] = useState(0);
   const href = `/products/${product.id}`;
   const basePrice = Number(product.price);
+  const productSpecs = product.specs || [];
   const optionPrices = useMemo(
     () =>
-      product.specs.slice(0, 3).filter(Boolean).map((label, index) => ({
+      productSpecs.slice(0, 3).filter(Boolean).map((label, index) => ({
         label,
         price: basePrice + index * 2500,
       })),
-    [basePrice, product.specs]
+    [basePrice, productSpecs]
   );
   const selectedPrice = optionPrices[selectedOption]?.price || basePrice;
-  const selectedOptionLabel = optionPrices[selectedOption]?.label || product.specs[0];
+  const selectedOptionLabel = optionPrices[selectedOption]?.label || productSpecs[0];
   const cartItem = useMemo(
     () => ({
       id: product.id,
@@ -85,7 +86,7 @@ const ProductCard = ({ product, variant = "default" }) => {
         <p className="mb-4 line-clamp-2 text-sm leading-6 text-slate-600">{product.description}</p>
 
         <div className="mb-4 flex flex-wrap gap-2">
-          {product.specs.slice(0, 2).map((spec) => (
+          {productSpecs.slice(0, 2).map((spec) => (
             <span key={spec} className="rounded bg-slate-100 px-2 py-1 text-[10px] text-slate-600">
               {spec}
             </span>

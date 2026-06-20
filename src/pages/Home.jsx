@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Award, CheckCircle, ChevronRight, ShieldCheck, Truck } from "lucide-react";
 import Hero from "../components/Hero";
+import ManufacturingShowcase from "../components/ManufacturingShowcase";
 import ProductCard from "../components/ProductCard";
 import { categories, products } from "../data/data";
 
@@ -81,6 +82,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <ManufacturingShowcase />
 
       {uploadedProducts.length > 0 && (
         <section className="bg-gradient-to-br from-cyan-50 via-white to-blue-50 py-16">

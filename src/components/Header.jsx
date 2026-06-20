@@ -118,6 +118,7 @@ const Header = () => {
           <NavLink to="/about" className={navLinkClass}>About</NavLink>
           <NavLink to="/support" className={navLinkClass}>Support</NavLink>
           <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
+          <NavLink to="/admin" className={navLinkClass}>Admin</NavLink>
           <NavLink
             to="/cart"
             className={({ isActive }) =>
@@ -226,8 +227,8 @@ const Header = () => {
                 ))}
               </div>
             )}
-            {["Home", "Products", "About", "Support", "Contact", "Cart"].map((label) => (
-              <Link key={label} to={label === "Home" ? "/" : `/${label.toLowerCase()}`} onClick={close} className="flex items-center justify-between rounded-md border border-slate-100 px-4 py-3 font-bold uppercase tracking-wider text-slate-800">
+            {["Home", "Products", "About", "Support", "Contact", "Admin", "Cart"].map((label) => (
+              <Link key={label} to={label === "Home" ? "/" : label === "Admin" ? "/admin" : `/${label.toLowerCase()}`} onClick={close} className="flex items-center justify-between rounded-md border border-slate-100 px-4 py-3 font-bold uppercase tracking-wider text-slate-800">
                 <span>{label}</span>
                 {label === "Cart" && (
                   <span className="inline-flex items-center gap-2">

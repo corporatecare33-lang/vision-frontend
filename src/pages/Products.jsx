@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard";
-import { categories, products } from "../data/data";
+import { categories } from "../data/data";
+import { useCatalogProducts } from "../hooks/useCatalogProducts";
 
 const priceRanges = [
   { id: "all", label: "All Prices" },
@@ -13,6 +14,7 @@ const priceRanges = [
 const Products = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [activePriceRange, setActivePriceRange] = useState("all");
+  const { products, isLoading, error, isUsingFallback } = useCatalogProducts();
 
   const uniqueProducts = useMemo(
     () =>
@@ -134,8 +136,11 @@ const Products = () => {
                 <p className="section-kicker">{activeCategoryName}</p>
                 <h2 className="section-title">Products</h2>
                 <p className="mt-2 text-sm font-bold text-slate-500">{activePriceLabel}</p>
+                {error && isUsingFallback && (
+                  <p className="mt-2 text-xs font-bold text-amber-600">Using local products until the dashboard API is running.</p>
+                )}
               </div>
-              <p className="text-sm font-bold text-slate-500">{displayProducts.length} items</p>
+              <p className="text-sm font-bold text-slate-500">{isLoading ? "Loading..." : `${displayProducts.length} items`}</p>
             </div>
             {displayProducts.length > 0 ? (
               <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">

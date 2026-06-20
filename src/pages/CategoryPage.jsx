@@ -2,16 +2,20 @@ import { Link, useParams } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import ProductVisual from "../components/ProductVisual";
-import { getCategory, getProductsForSubcategory } from "../data/data";
+import { getCategory } from "../data/data";
+import { useCatalogProducts } from "../hooks/useCatalogProducts";
 
 const CategoryPage = () => {
   const { categoryId } = useParams();
   const category = getCategory(categoryId);
+  const { products } = useCatalogProducts();
 
   if (!category) {
     return <div className="container-custom py-24 text-center text-2xl font-black">Category not found</div>;
   }
 
+  const getProductsForSubcategory = (activeCategoryId, activeSubcategoryId) =>
+    products.filter((product) => product.category === activeCategoryId && product.subcategory === activeSubcategoryId);
   const categoryProducts = category.subcategories.flatMap((subcategory) => getProductsForSubcategory(category.id, subcategory.id));
   const categoryProductImage = categoryProducts.find((product) => product.image);
   const fallbackVisual = categoryProducts[0]?.visual;

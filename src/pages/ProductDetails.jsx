@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import ProductVisual from "../components/ProductVisual";
-import { getCategory, getProduct, getSubcategory, products } from "../data/data";
+import { getCategory, getProduct, getSubcategory } from "../data/data";
+import { useCatalogProducts } from "../hooks/useCatalogProducts";
 import { addCartItem } from "../utils/cart";
 
 const tabs = ["Description", "Delivery Info", "Reviews"];
@@ -25,7 +26,8 @@ const ProductDetails = () => {
   const [selectedOption, setSelectedOption] = useState(0);
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const navigate = useNavigate();
-  const product = getProduct(productId);
+  const { products } = useCatalogProducts();
+  const product = products.find((item) => item.id === productId) || getProduct(productId);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -49,20 +51,21 @@ const ProductDetails = () => {
   const category = getCategory(product.category);
   const subcategory = getSubcategory(product.category, product.subcategory);
   const basePrice = Number(product.price);
-  const optionLabels = [product.specs[0], product.specs[1], product.specs[2]].filter(Boolean);
+  const productSpecs = product.specs || [];
+  const optionLabels = [productSpecs[0], productSpecs[1], productSpecs[2]].filter(Boolean);
   const optionPrices = optionLabels.map((label, index) => ({
     label,
     price: basePrice + index * 2500,
   }));
   const selectedPrice = optionPrices[selectedOption]?.price || basePrice;
-  const selectedOptionLabel = optionPrices[selectedOption]?.label || product.specs[0];
+  const selectedOptionLabel = optionPrices[selectedOption]?.label || productSpecs[0];
   const relatedProducts = products
     .filter((item) => item.subcategory === product.subcategory && item.id !== product.id)
     .slice(0, 4);
 
   const highlights = [
     ["100% genuine Vision product", "Official brand quality and verified model."],
-    [`${product.specs[1]} ready`, product.description],
+    [`${productSpecs[1] || product.model} ready`, product.description],
     ["Service support available", "Contact support for product guidance."],
   ];
 
@@ -77,7 +80,7 @@ const ProductDetails = () => {
       <div className="space-y-3 text-sm leading-7 text-slate-700">
         <p>{product.description}</p>
         <ul className="space-y-2">
-          {product.specs.map((spec) => (
+          {productSpecs.map((spec) => (
             <li key={spec} className="flex gap-2">
               <Check className="mt-1 h-4 w-4 shrink-0 text-vision-cyan" />
               <span>{spec}</span>

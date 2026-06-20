@@ -1,13 +1,15 @@
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import ProductCard from "../components/ProductCard";
-import { getCategory, getProductsForSubcategory, getSubcategory } from "../data/data";
+import { getCategory, getSubcategory } from "../data/data";
+import { useCatalogProducts } from "../hooks/useCatalogProducts";
 
 const SubcategoryPage = () => {
   const { categoryId, subcategoryId } = useParams();
   const category = getCategory(categoryId);
   const subcategory = getSubcategory(categoryId, subcategoryId);
-  const subcategoryProducts = getProductsForSubcategory(categoryId, subcategoryId);
+  const { products } = useCatalogProducts();
+  const subcategoryProducts = products.filter((product) => product.category === categoryId && product.subcategory === subcategoryId);
 
   if (!category || !subcategory) {
     return <div className="container-custom py-24 text-center text-2xl font-black">Subcategory not found</div>;
