@@ -46,7 +46,7 @@ body {
 .hero-banner {
   position: relative;
   width: 100%;
-  height: clamp(320px, 48vw, 625px);
+  aspect-ratio: 1600 / 625;
   max-height: 625px;
   overflow: hidden;
   background: #f8fafc;
@@ -535,7 +535,7 @@ body {
   }
 
   .hero-banner {
-    height: clamp(300px, 86vw, 520px);
+    aspect-ratio: 1600 / 625;
     max-height: none;
   }
 

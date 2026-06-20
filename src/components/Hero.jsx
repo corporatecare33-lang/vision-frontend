@@ -7,24 +7,20 @@ import { assetPath } from "../data/data";
 
 const slides = [
   {
-    image: "/hero/kettle-blue-tea.jpeg",
-    alt: "Vision blue kettle with tea",
+    image: "/hero/side-by-side-refrigerator.jpeg",
+    alt: "Vision side by side refrigerator",
   },
   {
-    image: "/hero/kettle-glass-boiling.jpeg",
-    alt: "Vision glass electric kettle",
+    image: "/hero/vertical-freezer.jpeg",
+    alt: "Vision vertical freezer",
   },
   {
-    image: "/hero/kettle-red-electric.jpeg",
-    alt: "Vision red electric kettle",
+    image: "/hero/single-door-refrigerator.jpeg",
+    alt: "Vision single door refrigerator",
   },
   {
-    image: "/hero/kettle-black-electric.jpeg",
-    alt: "Vision black electric kettle",
-  },
-  {
-    image: "/hero/kettle-steel-electric.jpeg",
-    alt: "Vision steel electric kettle",
+    image: "/hero/no-frost-refrigerator.jpeg",
+    alt: "Vision no frost refrigerator",
   },
 ];
 
