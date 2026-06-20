@@ -68,7 +68,21 @@ import {
   Gavel,
   Warehouse,
   IndianRupee,
-  Layers
+  Layers,
+  Megaphone,
+  TicketPercent,
+  Image,
+  Zap,
+  Banknote,
+  LineChart,
+  Mail as MailIcon,
+  Palette,
+  Receipt,
+  Cable,
+  Smartphone as SmartphoneIcon,
+  Radio,
+  Contact,
+  Store
 } from "lucide-react";
 import { adminLogout, getApiProducts, createApiProduct, deleteApiProduct } from "../services/productsApi";
 import {
@@ -360,9 +374,9 @@ const Dashboard = () => {
     }
   };
 
-  const handleSaveProduct = async (formData) => {
-    await createApiProduct(formData);
+  const handleSaveProduct = async () => {
     setShowAddProduct(false);
+    setEditProduct(null);
     loadProducts();
   };
 
@@ -399,15 +413,63 @@ const Dashboard = () => {
 
   const handleLogout = () => { adminLogout(); navigate("/login"); };
 
-  const sidebarItems = [
-    { id: "dashboard", icon: LayoutDashboard, label: "ড্যাশবোর্ড" },
-    { id: "users", icon: Users, label: "ইউজার ম্যানেজমেন্ট" },
-    { id: "products", icon: ShoppingBag, label: "পণ্য ম্যানেজমেন্ট" },
-    { id: "stock-management", icon: Warehouse, label: "স্টক ম্যানেজমেন্ট" },
-    { id: "category-management", icon: Layers, label: "ক্যাটাগরি ম্যানেজমেন্ট" },
-    { id: "orders", icon: ShoppingCart, label: "অর্ডার" },
-    { id: "fraud-check", icon: ScanEye, label: "ফ্রড চেকার" },
-    { id: "page-management", icon: FileText, label: "পেজ ম্যানেজমেন্ট" },
+  const sidebarGroups = [
+    {
+      label: "প্রোডাক্ট",
+      items: [
+        { id: "products", icon: ShoppingBag, label: "সকল প্রোডাক্ট" },
+        { id: "price-edit", icon: IndianRupee, label: "প্রাইস এডিট" },
+        { id: "category-management", icon: Layers, label: "ক্যাটাগরি" },
+      ]
+    },
+    {
+      label: "মার্কেটিং",
+      items: [
+        { id: "marketing", icon: Megaphone, label: "মার্কেটিং" },
+        { id: "coupons", icon: TicketPercent, label: "কুপন" },
+        { id: "banners", icon: Image, label: "ব্যানার" },
+        { id: "flash-sale", icon: Zap, label: "ফ্ল্যাশ সেল" },
+      ]
+    },
+    {
+      label: "অর্ডার ও ডেলিভারি",
+      items: [
+        { id: "orders", icon: ShoppingCart, label: "অর্ডার" },
+        { id: "shipping-charge", icon: Truck, label: "শিপিং চার্জ" },
+        { id: "courier-api", icon: Cable, label: "কুরিয়ার API" },
+      ]
+    },
+    {
+      label: "পেমেন্ট",
+      items: [
+        { id: "bkash", icon: SmartphoneIcon, label: "বিকাশ পেমেন্ট" },
+        { id: "payment-settings", icon: Wallet, label: "পেমেন্ট সেটিংস" },
+      ]
+    },
+    {
+      label: "কন্টেন্ট",
+      items: [
+        { id: "page-management", icon: FileText, label: "পেজ ম্যানেজ" },
+        { id: "banners", icon: Image, label: "ব্যানার" },
+      ]
+    },
+    {
+      label: "এনালিটিক্স ও ইন্টিগ্রেশন",
+      items: [
+        { id: "facebook-pixel", icon: Radio, label: "Facebook Pixel" },
+        { id: "analytics", icon: LineChart, label: "পিক্সেল ও অ্যানালিটিক্স" },
+        { id: "smtp-email", icon: MailIcon, label: "SMTP ইমেইল" },
+      ]
+    },
+    {
+      label: "সেটিংস",
+      items: [
+        { id: "site-settings", icon: Store, label: "সাইট সেটিংস" },
+        { id: "fraud-check", icon: ScanEye, label: "ফ্রড চেকার" },
+        { id: "users", icon: Users, label: "ইউজার ম্যানেজমেন্ট" },
+        { id: "stock-management", icon: Warehouse, label: "স্টক ম্যানেজমেন্ট" },
+      ]
+    },
   ];
 
   return (
@@ -426,23 +488,29 @@ const Dashboard = () => {
           </div>
         </div>
         <button onClick={() => setSidebarOpen(false)} className="absolute top-5 right-4 p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 lg:hidden transition-colors"><X className="w-5 h-5" /></button>
-        <div className="px-5 pt-5 pb-2"><p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">মেনু</p></div>
-        <nav className="flex-1 px-3 pb-3 space-y-0.5 overflow-y-auto">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeNav === item.id;
-            return (
-              <button key={item.id} onClick={() => { setActiveNav(item.id); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 relative group ${isActive ? "bg-gradient-to-r from-vision-blue to-vision-cyan text-white shadow-lg shadow-vision-blue/25" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
-                {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full opacity-80" />}
-                <Icon className={`w-4.5 h-4.5 ${isActive ? "text-white" : "text-gray-400 group-hover:text-gray-600"} transition-colors`} />
-                {item.label}
-                {isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />}
-              </button>
-            );
-          })}
+        <nav className="flex-1 px-3 pb-3 overflow-y-auto">
+          {sidebarGroups.map((group) => (
+            <div key={group.label} className="mb-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-3 mb-1.5">{group.label}</p>
+              <div className="space-y-0.5">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeNav === item.id;
+                  return (
+                    <button key={item.id} onClick={() => { setActiveNav(item.id); setSidebarOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 relative group ${isActive ? "bg-gradient-to-r from-vision-blue to-vision-cyan text-white shadow-lg shadow-vision-blue/25" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
+                      {isActive && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full opacity-80" />}
+                      <Icon className={`w-4.5 h-4.5 ${isActive ? "text-white" : "text-gray-400 group-hover:text-gray-600"} transition-colors`} />
+                      {item.label}
+                      {isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
-        <div className="p-4 border-t border-gray-100 space-y-1.5 bg-gray-50/50">
+        <div className="mt-auto p-4 border-t border-gray-100 space-y-1.5 bg-gray-50/50">
           <button onClick={() => navigate("/")} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-600 hover:bg-white hover:text-vision-blue hover:shadow-sm transition-all duration-200"><Home className="w-4.5 h-4.5" /> হোমপেজ</button>
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"><LogOut className="w-4.5 h-4.5" /> লগআউট</button>
         </div>
@@ -452,9 +520,9 @@ const Dashboard = () => {
         <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shadow-sm">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden transition-colors"><Menu className="w-5 h-5" /></button>
+            <button onClick={() => navigate("/")} className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-50 hover:text-vision-blue transition-all"><Home className="w-3.5 h-3.5" /> হোমপেজ</button>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-xl text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-50 transition-all"><Globe className="w-3.5 h-3.5" /> <span>বাংলা</span> <ChevronDown className="w-3 h-3" /></div>
             <button className="relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-vision-blue transition-all"><BellRing className="w-5 h-5" /><span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span></button>
             <div className="flex items-center gap-2.5 pl-2 border-l border-gray-200">
               <div className="text-right hidden sm:block"><p className="text-xs font-semibold text-gray-900">superadmin</p><p className="text-[10px] text-gray-400">এডমিন</p></div>
@@ -1159,6 +1227,343 @@ const Dashboard = () => {
             </div>
           )}
 
+          {/* ============ PRICE EDIT ============ */}
+          {activeNav === "price-edit" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">প্রাইস এডিট</h3>
+                  <p className="text-sm text-gray-500 mt-1">পণ্যের মূল্য পরিবর্তন ও বাল্ক প্রাইস এডিট করুন</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><RefreshCcw className="w-4 h-4" /> রিফ্রেশ</button>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+                <IndianRupee className="w-16 h-16 text-gray-200 mb-4" />
+                <h4 className="text-lg font-bold text-gray-900 mb-2">প্রাইস এডিট টুল</h4>
+                <p className="text-sm text-gray-500 max-w-md">এখানে আপনি প্রতিটি পণ্যের মূল্য আলাদাভাবে অথবা বাল্ক আপডেট করতে পারবেন।</p>
+              </div>
+            </div>
+          )}
+
+          {/* ============ MARKETING ============ */}
+          {activeNav === "marketing" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">মার্কেটিং</h3>
+                  <p className="text-sm text-gray-500 mt-1">মার্কেটিং ক্যাম্পেইন ও প্রমোশন ম্যানেজ করুন</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><Megaphone className="w-4 h-4" /> নতুন ক্যাম্পেইন</button>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+                <Megaphone className="w-16 h-16 text-gray-200 mb-4" />
+                <h4 className="text-lg font-bold text-gray-900 mb-2">মার্কেটিং সেন্টার</h4>
+                <p className="text-sm text-gray-500 max-w-md">ইমেইল মার্কেটিং, SMS ক্যাম্পেইন, পুশ নোটিফিকেশন এবং আরও অনেক কিছু।</p>
+              </div>
+            </div>
+          )}
+
+          {/* ============ COUPONS ============ */}
+          {activeNav === "coupons" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">কুপন ম্যানেজমেন্ট</h3>
+                  <p className="text-sm text-gray-500 mt-1">ডিসকাউন্ট কুপন ও প্রমো কোড তৈরি ও পরিচালনা</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><Plus className="w-4 h-4" /> নতুন কুপন</button>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {[
+                  { value: "০", label: "মোট কুপন", color: "text-gray-900" },
+                  { value: "০", label: "সক্রিয়", color: "text-green-600" },
+                  { value: "০", label: "ব্যবহৃত", color: "text-blue-600" },
+                ].map((s, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5">
+                    <p className={`text-3xl font-extrabold ${s.color}`}>{s.value}</p>
+                    <p className="text-sm text-gray-400 mt-1">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+                <TicketPercent className="w-16 h-16 text-gray-200 mb-4" />
+                <h4 className="text-lg font-bold text-gray-900 mb-2">কুপনের তালিকা</h4>
+                <p className="text-sm text-gray-500">কোনো কুপন নেই। নতুন কুপন তৈরি করুন।</p>
+              </div>
+            </div>
+          )}
+
+          {/* ============ BANNERS ============ */}
+          {activeNav === "banners" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">ব্যানার ম্যানেজমেন্ট</h3>
+                  <p className="text-sm text-gray-500 mt-1">হোমপেজ ও ক্যাটাগরি পেজের ব্যানার পরিচালনা</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><Plus className="w-4 h-4" /> নতুন ব্যানার</button>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {["হিরো ব্যানার", "প্রমোশনাল ব্যানার", "সাইড ব্যানার"].map((b, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center justify-center text-center hover:shadow-md transition-all">
+                    <Image className="w-12 h-12 text-gray-200 mb-3" />
+                    <h4 className="text-sm font-bold text-gray-900 mb-1">{b}</h4>
+                    <p className="text-xs text-gray-400 mb-3">৯৬০ x ৪০০ px</p>
+                    <button className="px-4 py-2 bg-vision-blue/10 text-vision-blue rounded-xl text-xs font-bold hover:bg-vision-blue/20 transition-all">ব্যানার আপলোড</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ============ FLASH SALE ============ */}
+          {activeNav === "flash-sale" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">ফ্ল্যাশ সেল</h3>
+                  <p className="text-sm text-gray-500 mt-1">সীমিত সময়ের অফার ও ফ্ল্যাশ ডিল সেটআপ</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><Zap className="w-4 h-4" /> নতুন ফ্ল্যাশ সেল</button>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+                <Zap className="w-16 h-16 text-gray-200 mb-4" />
+                <h4 className="text-lg font-bold text-gray-900 mb-2">কোনো সক্রিয় ফ্ল্যাশ সেল নেই</h4>
+                <p className="text-sm text-gray-500 max-w-md">নতুন ফ্ল্যাশ সেল তৈরি করে পণ্যে ডিসকাউন্ট অফার করুন।</p>
+              </div>
+            </div>
+          )}
+
+          {/* ============ SHIPPING CHARGE ============ */}
+          {activeNav === "shipping-charge" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">শিপিং চার্জ</h3>
+                  <p className="text-sm text-gray-500 mt-1">ডেলিভারি চার্জ ও শিপিং জোন সেটআপ</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><Settings className="w-4 h-4" /> কনফিগার</button>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {[
+                  { label: "ঢাকা সিটির মধ্যে", value: "৬০ টাকা" },
+                  { label: "ঢাকা সিটির বাইরে", value: "১৩০ টাকা" },
+                  { label: "ফ্রি শিপিং থ্রেশহোল্ড", value: "৳২০০০+" },
+                ].map((s, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5">
+                    <p className="text-xs text-gray-400">{s.label}</p>
+                    <p className="text-xl font-extrabold text-gray-900 mt-1">{s.value}</p>
+                    <button className="mt-3 text-xs text-vision-blue font-bold hover:underline">এডিট করুন</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ============ COURIER API ============ */}
+          {activeNav === "courier-api" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">কুরিয়ার API</h3>
+                  <p className="text-sm text-gray-500 mt-1">কুরিয়ার সার্ভিস ইন্টিগ্রেশন ও API সেটিংস</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><Cable className="w-4 h-4" /> কানেক্ট</button>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+                <Cable className="w-16 h-16 text-gray-200 mb-4" />
+                <h4 className="text-lg font-bold text-gray-900 mb-2">কোনো কুরিয়ার সংযুক্ত নেই</h4>
+                <p className="text-sm text-gray-500 max-w-md">SteadFast, Pathao, Redx, Paperfly, Sundarban সহ বিভিন্ন কুরিয়ারের API সংযুক্ত করুন।</p>
+              </div>
+            </div>
+          )}
+
+          {/* ============ BKASH ============ */}
+          {activeNav === "bkash" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">বিকাশ পেমেন্ট</h3>
+                  <p className="text-sm text-gray-500 mt-1">বিকাশ মার্চেন্ট API ইন্টিগ্রেশন ও সেটিংস</p>
+                </div>
+                <button className="flex items-center gap-2 bg-gradient-to-r from-vision-blue to-vision-cyan text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:shadow-lg transition-all"><SmartphoneIcon className="w-4 h-4" /> কনফিগার</button>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                  <h4 className="text-sm font-bold text-gray-900 mb-4">মার্চেন্ট তথ্য</h4>
+                  <div className="space-y-3">
+                    {[
+                      { label: "মার্চেন্ট নম্বর", value: "০১৭XXXXXXXX" },
+                      { label: "স্ট্যাটাস", value: "নিষ্ক্রিয়" },
+                    ].map((f, i) => (
+                      <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50">
+                        <span className="text-xs text-gray-500">{f.label}</span>
+                        <span className="text-xs font-bold text-gray-900">{f.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                  <h4 className="text-sm font-bold text-gray-900 mb-4">API সেটিংস</h4>
+                  <div className="flex items-center justify-between py-2">
+                    <span className="text-xs text-gray-500">API স্ট্যাটাস</span>
+                    <StatusBadge status="inactive" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ============ PAYMENT SETTINGS ============ */}
+          {activeNav === "payment-settings" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">পেমেন্ট সেটিংস</h3>
+                  <p className="text-sm text-gray-500 mt-1">অন্যান্য পেমেন্ট গেটওয়ে সেটিংস</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {[
+                  { name: "Nagad", icon: SmartphoneIcon },
+                  { name: "Rocket", icon: SmartphoneIcon },
+                  { name: "Credit/Debit Card", icon: Wallet },
+                  { name: "Cash on Delivery", icon: Banknote },
+                ].map((p, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center justify-between hover:shadow-md transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center"><p.icon className="w-5 h-5 text-gray-500" /></div>
+                      <div><p className="text-sm font-bold text-gray-900">{p.name}</p><p className="text-[10px] text-gray-400">{i === 3 ? "সক্রিয়" : "নিষ্ক্রিয়"}</p></div>
+                    </div>
+                    <button className={`px-3 py-1.5 rounded-lg text-[10px] font-bold ${i === 3 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>{i === 3 ? "সক্রিয়" : "নিষ্ক্রিয়"}</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ============ FACEBOOK PIXEL ============ */}
+          {activeNav === "facebook-pixel" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">Facebook Pixel</h3>
+                  <p className="text-sm text-gray-500 mt-1">Facebook Pixel ও CAPI সেটআপ</p>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+                <div>
+                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">Pixel ID</label>
+                  <input placeholder="আপনার Facebook Pixel ID দিন" className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-vision-blue/50" />
+                </div>
+                <div>
+                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">Access Token (CAPI)</label>
+                  <input placeholder="Conversions API Token" className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-vision-blue/50" />
+                </div>
+                <button className="px-6 py-3 bg-gradient-to-r from-vision-blue to-vision-cyan text-white rounded-xl text-xs font-bold hover:shadow-lg transition-all">সেভ করুন</button>
+              </div>
+            </div>
+          )}
+
+          {/* ============ ANALYTICS ============ */}
+          {activeNav === "analytics" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">পিক্সেল ও অ্যানালিটিক্স</h3>
+                  <p className="text-sm text-gray-500 mt-1">Google Analytics, Facebook Pixel ও অন্যান্য ট্র্যাকিং</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {[
+                  { name: "Google Analytics 4", icon: LineChart },
+                  { name: "Google Tag Manager", icon: LineChart },
+                  { name: "Facebook Pixel", icon: Radio },
+                  { name: "Google Search Console", icon: LineChart },
+                ].map((a, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center justify-between hover:shadow-md transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center"><a.icon className="w-5 h-5 text-gray-500" /></div>
+                      <div><p className="text-sm font-bold text-gray-900">{a.name}</p><p className="text-[10px] text-gray-400">কনফিগার করুন</p></div>
+                    </div>
+                    <button className="px-3 py-1.5 bg-vision-blue/10 text-vision-blue rounded-lg text-[10px] font-bold hover:bg-vision-blue/20 transition-all">সেটআপ</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ============ SMTP EMAIL ============ */}
+          {activeNav === "smtp-email" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">SMTP ইমেইল</h3>
+                  <p className="text-sm text-gray-500 mt-1">ইমেইল সার্ভার কনফিগারেশন ও SMTP সেটিংস</p>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: "SMTP Host", placeholder: "smtp.gmail.com" },
+                    { label: "SMTP Port", placeholder: "587" },
+                    { label: "SMTP Username", placeholder: "your@email.com" },
+                    { label: "SMTP Password", placeholder: "********" },
+                  ].map((f, i) => (
+                    <div key={i}>
+                      <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">{f.label}</label>
+                      <input placeholder={f.placeholder} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-vision-blue/50" />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">From Email</label>
+                  <input placeholder="noreply@yourstore.com" className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-vision-blue/50" />
+                </div>
+                <div className="flex gap-3">
+                  <button className="px-6 py-3 bg-gradient-to-r from-vision-blue to-vision-cyan text-white rounded-xl text-xs font-bold hover:shadow-lg transition-all">সেভ করুন</button>
+                  <button className="px-6 py-3 border border-gray-200 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-50 transition-all">টেস্ট ইমেইল</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ============ SITE SETTINGS ============ */}
+          {activeNav === "site-settings" && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-gray-900">সাইট সেটিংস</h3>
+                  <p className="text-sm text-gray-500 mt-1">ওয়েবসাইটের গ্লোবাল সেটিংস ও কনফিগারেশন</p>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: "সাইটের নাম", placeholder: "Vision E-commerce" },
+                    { label: "সাইটের URL", placeholder: "https://visionecommerce.com" },
+                    { label: "ইমেইল", placeholder: "info@visionecommerce.com" },
+                    { label: "ফোন", placeholder: "০১৭XXXXXXXX" },
+                  ].map((f, i) => (
+                    <div key={i}>
+                      <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">{f.label}</label>
+                      <input placeholder={f.placeholder} className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-vision-blue/50" />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">ঠিকানা</label>
+                  <textarea rows={2} placeholder="আপনার স্টোরের ঠিকানা" className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-vision-blue/50" />
+                </div>
+                <div>
+                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">সাইট লোগো</label>
+                  <input type="file" accept="image/*" className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-vision-blue/10 file:text-vision-blue" />
+                </div>
+                <button className="px-6 py-3 bg-gradient-to-r from-vision-blue to-vision-cyan text-white rounded-xl text-xs font-bold hover:shadow-lg transition-all">সেটিংস সেভ করুন</button>
+              </div>
+            </div>
+          )}
+
           {/* ============ PAGE MANAGEMENT ============ */}
           {activeNav === "page-management" && (
             <div className="space-y-6 animate-fadeIn">
@@ -1379,15 +1784,17 @@ const CategoryForm = ({ category, onSave, onCancel, isEdit }) => {
   const [newSubName, setNewSubName] = useState("");
   const [newSubId, setNewSubId] = useState("");
   const [newSubTagline, setNewSubTagline] = useState("");
+  const [newSubBanner, setNewSubBanner] = useState("");
 
   const addSubcategory = () => {
     if (!newSubName || !newSubId) return;
     const subs = [...(form.subcategories || [])];
-    subs.push({ id: newSubId, name: newSubName, tagline: newSubTagline });
+    subs.push({ id: newSubId, name: newSubName, tagline: newSubTagline, banner: newSubBanner || "" });
     setForm({ ...form, subcategories: subs });
     setNewSubName("");
     setNewSubId("");
     setNewSubTagline("");
+    setNewSubBanner("");
   };
 
   const removeSubcategory = (id) => {
@@ -1481,13 +1888,15 @@ const CategoryForm = ({ category, onSave, onCancel, isEdit }) => {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-4 gap-2">
           <input value={newSubId} onChange={(e) => setNewSubId(e.target.value)} placeholder="ID"
             className="rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none focus:border-vision-blue/50" />
           <input value={newSubName} onChange={(e) => setNewSubName(e.target.value)} placeholder="নাম"
             className="rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none focus:border-vision-blue/50" />
+          <input value={newSubTagline} onChange={(e) => setNewSubTagline(e.target.value)} placeholder="ট্যাগলাইন"
+            className="rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none focus:border-vision-blue/50" />
           <div className="flex gap-1">
-            <input value={newSubTagline} onChange={(e) => setNewSubTagline(e.target.value)} placeholder="ট্যাগলাইন"
+            <input value={newSubBanner} onChange={(e) => setNewSubBanner(e.target.value)} placeholder="ব্যানার (URL)"
               className="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-xs outline-none focus:border-vision-blue/50" />
             <button type="button" onClick={addSubcategory} disabled={!newSubName || !newSubId}
               className="px-3 py-2 bg-vision-blue text-white rounded-xl text-[10px] font-bold hover:bg-vision-cyan disabled:opacity-50 transition-all">+</button>

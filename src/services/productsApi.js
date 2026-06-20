@@ -19,7 +19,7 @@ export const adminLogin = async (username, password) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
-  });schema
+  });
 
   const payload = await response.json();
 
@@ -68,6 +68,22 @@ export const createApiProduct = async (formData) => {
 
   if (!response.ok) {
     throw new Error(payload.message || "Could not save product");
+  }
+
+  return normalizeProduct(payload);
+};
+
+export const updateApiProduct = async (productId, formData) => {
+  const response = await fetch(`${API_URL}/products/${productId}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: formData,
+  });
+
+  const payload = await response.json();
+
+  if (!response.ok) {
+    throw new Error(payload.message || "Could not update product");
   }
 
   return normalizeProduct(payload);

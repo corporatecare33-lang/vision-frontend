@@ -5,6 +5,7 @@ const subcategorySchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   tagline: { type: String, default: "" },
   path: { type: String, default: "" },
+  banner: { type: String, default: "" },
 });
 
 const categorySchema = new mongoose.Schema(
