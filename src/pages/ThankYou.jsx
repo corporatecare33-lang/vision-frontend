@@ -13,41 +13,98 @@ const escapePdfText = (value) =>
   String(value ?? "").replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 
 const downloadPdf = (order) => {
-  const rows = [
-    "Vision Appliances Invoice",
-    `Invoice: ${order.id}`,
-    `Date: ${new Date(order.createdAt).toLocaleString()}`,
-    "",
-    `Customer: ${order.customer.name}`,
-    `Phone: ${order.customer.phone}`,
-    `Address: ${order.customer.address}`,
-    `Payment: ${order.paymentMethod}`,
-    `Delivery: ${order.deliveryArea === "inside" ? "Inside Dhaka" : "Outside Dhaka"}`,
-    "",
-    "Items:",
-    ...order.items.map((item) => `${item.name} (${item.option}) x ${item.quantity} - Tk ${item.price * item.quantity}`),
-    "",
-    `Subtotal: Tk ${order.subtotal}`,
-    `Delivery: Tk ${order.deliveryFee}`,
-    `Total: Tk ${order.total}`,
-  ];
+  const deliveryLabel = order.deliveryArea === "inside" ? "Inside Dhaka" : "Outside Dhaka";
+  const formatTk = (value) => `Tk ${Number(value || 0).toLocaleString("en-US")}`;
+  const fitText = (value, maxLength) => {
+    const text = String(value ?? "");
+    return text.length > maxLength ? `${text.slice(0, maxLength - 3)}...` : text;
+  };
 
-  const stream = [
-    "BT",
-    "/F1 14 Tf",
-    "50 780 Td",
-    ...rows.flatMap((row, index) => [
-      index === 0 ? "" : "0 -22 Td",
-      `(${escapePdfText(row)}) Tj`,
-    ]),
-    "ET",
-  ].filter(Boolean).join("\n");
+  const commands = [];
+  const rect = (x, y, width, height, color = "1 1 1") => {
+    commands.push("q", `${color} rg`, `${x} ${y} ${width} ${height} re f`, "Q");
+  };
+  const strokeRect = (x, y, width, height, color = "0.86 0.91 0.96", lineWidth = 1) => {
+    commands.push("q", `${lineWidth} w`, `${color} RG`, `${x} ${y} ${width} ${height} re S`, "Q");
+  };
+  const line = (x1, y1, x2, y2, color = "0.86 0.91 0.96", lineWidth = 1) => {
+    commands.push("q", `${lineWidth} w`, `${color} RG`, `${x1} ${y1} m ${x2} ${y2} l S`, "Q");
+  };
+  const text = (value, x, y, size = 10, font = "F1", color = "0.08 0.13 0.21") => {
+    commands.push(
+      "BT",
+      `${color} rg`,
+      `/${font} ${size} Tf`,
+      `${x} ${y} Td`,
+      `(${escapePdfText(value)}) Tj`,
+      "ET"
+    );
+  };
 
+  rect(0, 0, 612, 792, "1 1 1");
+  rect(0, 690, 612, 102, "0.04 0.20 0.45");
+  rect(0, 680, 612, 10, "0.16 0.78 0.81");
+  text("VISION", 42, 743, 28, "F2", "1 1 1");
+  text("APPLIANCES", 44, 724, 10, "F2", "0.70 0.93 0.95");
+  text("Invoice", 465, 748, 28, "F2", "1 1 1");
+  text(order.id, 466, 728, 10, "F1", "0.84 0.94 0.98");
+  text(new Date(order.createdAt).toLocaleString(), 466, 712, 10, "F1", "0.84 0.94 0.98");
+
+  rect(42, 560, 252, 88, "0.96 0.99 1");
+  strokeRect(42, 560, 252, 88);
+  text("Billed To", 60, 622, 12, "F2", "0.04 0.20 0.45");
+  text(fitText(order.customer.name, 32), 60, 602, 10, "F2");
+  text(`Phone: ${fitText(order.customer.phone, 24)}`, 60, 586, 9);
+  text(`Address: ${fitText(order.customer.address, 35)}`, 60, 570, 9);
+
+  rect(318, 560, 252, 88, "0.98 0.99 1");
+  strokeRect(318, 560, 252, 88);
+  text("Order Details", 336, 622, 12, "F2", "0.04 0.20 0.45");
+  text(`Payment: ${fitText(order.paymentMethod, 26)}`, 336, 602, 9);
+  text(`Delivery: ${deliveryLabel}`, 336, 586, 9);
+  text(`Items: ${order.itemCount}`, 336, 570, 9);
+
+  rect(42, 512, 528, 30, "0.04 0.20 0.45");
+  text("Product", 60, 523, 10, "F2", "1 1 1");
+  text("Option", 310, 523, 10, "F2", "1 1 1");
+  text("Qty", 412, 523, 10, "F2", "1 1 1");
+  text("Total", 488, 523, 10, "F2", "1 1 1");
+
+  let rowY = 482;
+  order.items.slice(0, 10).forEach((item, index) => {
+    if (index % 2 === 0) rect(42, rowY - 9, 528, 30, "0.98 0.99 1");
+    line(42, rowY - 10, 570, rowY - 10);
+    text(fitText(item.name, 38), 60, rowY, 9, "F2");
+    text(fitText(item.option, 17), 310, rowY, 9);
+    text(String(item.quantity), 418, rowY, 9, "F2");
+    text(formatTk(item.price * item.quantity), 488, rowY, 9, "F2", "0.04 0.20 0.45");
+    rowY -= 30;
+  });
+  if (order.items.length > 10) {
+    text(`+ ${order.items.length - 10} more item(s)`, 60, rowY, 9, "F2", "0.39 0.45 0.55");
+  }
+
+  const totalBoxY = Math.max(98, rowY - 104);
+  rect(350, totalBoxY, 220, 96, "0.96 0.99 1");
+  strokeRect(350, totalBoxY, 220, 96, "0.65 0.88 0.92");
+  text("Subtotal", 368, totalBoxY + 68, 10);
+  text(formatTk(order.subtotal), 482, totalBoxY + 68, 10, "F2");
+  text("Delivery", 368, totalBoxY + 46, 10);
+  text(formatTk(order.deliveryFee), 482, totalBoxY + 46, 10, "F2");
+  line(368, totalBoxY + 32, 552, totalBoxY + 32, "0.65 0.88 0.92");
+  text("Total", 368, totalBoxY + 12, 14, "F2", "0.04 0.20 0.45");
+  text(formatTk(order.total), 480, totalBoxY + 12, 14, "F2", "0.04 0.20 0.45");
+
+  text("Thank you for shopping with Vision Appliances.", 42, 72, 10, "F2", "0.04 0.20 0.45");
+  text("Please keep this invoice for your order confirmation and delivery reference.", 42, 56, 8, "F1", "0.39 0.45 0.55");
+
+  const stream = commands.join("\n");
   const objects = [
     "<< /Type /Catalog /Pages 2 0 R >>",
     "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
-    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>",
     "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
     `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
   ];
 

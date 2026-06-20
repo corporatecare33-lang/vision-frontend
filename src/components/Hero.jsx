@@ -7,38 +7,24 @@ import { assetPath } from "../data/data";
 
 const slides = [
   {
-    image: "/hero/side-by-side.jpg",
-    alt: "Vision side by side refrigerator",
-    kicker: "Vision Cooling",
-    title: "Side by Side Refrigerator",
-    subtitle: "Smart storage, premium finish, and fresh cooling for modern homes.",
-    tone: "light",
+    image: "/hero/kettle-blue-tea.jpeg",
+    alt: "Vision blue kettle with tea",
   },
   {
-    image: "/hero/single-door.jpg",
-    alt: "Vision single door refrigerator",
-    kicker: "Compact Freshness",
-    title: "Single Door Refrigerator",
-    subtitle: "Space-saving cooling with dependable everyday performance.",
-    tone: "light",
+    image: "/hero/kettle-glass-boiling.jpeg",
+    alt: "Vision glass electric kettle",
   },
   {
-    image: "/hero/non-forst-english-1920x550.jpg",
-    alt: "Vision no frost refrigerator",
-    kicker: "No Frost Series",
-    title: "Fresh Cooling, Less Hassle",
-    subtitle: "Advanced no-frost performance with lasting durability.",
-    tone: "dark",
-    align: "right",
-    mobileFit: "cover",
+    image: "/hero/kettle-red-electric.jpeg",
+    alt: "Vision red electric kettle",
   },
   {
-    image: "/hero/verticle-freezer.jpg",
-    alt: "Vision vertical freezer",
-    kicker: "Vertical Freezer",
-    title: "More Space, Clean Design",
-    subtitle: "Compact freezer capacity for a smarter modern kitchen.",
-    tone: "light",
+    image: "/hero/kettle-black-electric.jpeg",
+    alt: "Vision black electric kettle",
+  },
+  {
+    image: "/hero/kettle-steel-electric.jpeg",
+    alt: "Vision steel electric kettle",
   },
 ];
 
@@ -48,13 +34,8 @@ const Hero = () => {
       <Swiper modules={[Pagination, Autoplay, EffectFade]} effect="fade" pagination={{ clickable: true }} autoplay={{ delay: 4500 }} loop className="hero-swiper">
         {slides.map((slide) => (
           <SwiperSlide key={slide.image}>
-            <div className={`hero-banner ${slide.mobileFit === "cover" ? "hero-banner-mobile-cover" : ""}`}>
+            <div className="hero-banner">
               <img src={assetPath(slide.image)} alt={slide.alt} />
-              <div className={`hero-copy ${slide.tone === "dark" ? "hero-copy-dark" : ""} ${slide.align === "right" ? "hero-copy-right" : ""}`}>
-                <p>{slide.kicker}</p>
-                <h1>{slide.title}</h1>
-                <span>{slide.subtitle}</span>
-              </div>
             </div>
           </SwiperSlide>
         ))}

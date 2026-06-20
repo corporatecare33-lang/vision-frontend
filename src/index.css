@@ -46,17 +46,18 @@ body {
 .hero-banner {
   position: relative;
   width: 100%;
-  aspect-ratio: 1920 / 550;
-  min-height: 260px;
-  max-height: 550px;
+  height: clamp(320px, 48vw, 625px);
+  max-height: 625px;
   overflow: hidden;
+  background: #f8fafc;
 }
 
 .hero-banner img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .hero-copy {
@@ -534,10 +535,8 @@ body {
   }
 
   .hero-banner {
-    aspect-ratio: 1920 / 750;
-    min-height: 0;
+    height: clamp(300px, 86vw, 520px);
     max-height: none;
-    background: #ffffff;
   }
 
   .hero-banner::after {
@@ -545,14 +544,7 @@ body {
   }
 
   .hero-banner img {
-    height: 100%;
-    width: 100%;
     object-fit: contain;
-    object-position: center;
-  }
-
-  .hero-banner-mobile-cover img {
-    object-fit: cover;
   }
 
   .hero-copy,
